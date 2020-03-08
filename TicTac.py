@@ -3,26 +3,28 @@ import sys
 from random import randint
 from os import system, name
 import time
-# comment to raise a PR
-class game:
-    board = np.empty([3,3], dtype = str)
+
+
+class Game:
+    board = np.empty([3, 3], dtype=str)
     num_player = 0
     cur_player = 0
+
     def __init__(self):
-        self.cur_player = randint(0,1)
-    
-    def set_player_count(self,num_player):
+        self.cur_player = randint(0, 1)
+
+    def set_player_count(self, num_player):
         self.num_player = int(num_player)
-    
-    def set_player(self,num_player):
+
+    def set_player(self, num_player):
         self.cur_player = num_player
-    
+
     def get_player_count(self):
         return self.num_player
-    
+
     def get_player(self):
         return self.cur_player
-    
+
     def get_board(self):
         return self.board
 
@@ -35,61 +37,69 @@ class game:
         else:
            print("It's Your Turn!") if self.get_player() == 0 else print("It's the Computer's Turn!")
 
-    def check_row(self,marker):
-        for row, i in enumerate(self.board):    
+    def check_row(self, marker):
+        for row, i in enumerate(self.board):
             count = 0
             for item in self.board[row]:
-                if (item == marker):count+=1 
+                if (item == marker):
+                    count += 1
             if count == 3:
-                return 1
-        return 0
+                return True
+        return False
 
-    def check_col(self,marker):
-        for col,i in enumerate(self.board):
+    def check_col(self, marker):
+        for col,  i in enumerate(self.board):
             count = 0
-            column = self.board[:,col]
+            column = self.board[:, col]
             for item in column:
-                if (item == marker):count+=1 
+                if (item == marker):
+                    count += 1
             if count == 3:
-                return 1
-        return 0
-    
-    def check_diag(self,marker):
-        diag = np.empty([2,3],dtype = str)
+                return True
+        return False
+
+    def check_diag(self, marker):
+        diag = np.empty([2, 3], dtype=str)
         for i in range(3):
-            diag[0,i] = self.board[i,i]
-            diag[1,i] = self.board[i,2-i]
+            diag[0, i] = self.board[i, i]
+            diag[1, i] = self.board[i, 2-i]
         count1 = 0
         count2 = 0
-        for item1, item2 in zip(diag[0],diag[1]):
-            if item1 == marker:count1+=1 
-            if item2 == marker:count2+=1 
-            if count1 == 3 or count2 == 3:return 1
-        return 0
-    
-    def check_win(self,marker):
-        if self.check_row(marker): return 1
-        elif self.check_col(marker): return 1
-        elif self.check_diag(marker): return 1
-        else: return 0
-    
-    def check_location(self,location):
-        return self.board[int(location[0]),int(location[1])] == ""
-    #This function checks to see if a marker can be placed at a location
-    # Moves were not being read in correctly as integers. Type casting fixed issue
-    def add_move(self,location, cur_player_marker):
-            self.board[int(location[0]),int(location[1])] = cur_player_marker
-    
+        for item1, item2 in zip(diag[0], diag[1]):
+            if item1 == marker:
+                count1 += 1
+            if item2 == marker:
+                count2 += 1
+            if count1 == 3 or count2 == 3:
+                return True
+        return False
+
+    def check_win(self, marker):
+        is_win = self.check_row(marker) or \
+                 self.check_col(marker) or self.check_diag(marker)
+        return is_win
+
+
+    def check_location(self, location):
+        return self.board[int(location[0]), int(location[1])] == ""
+    # This function checks to see if a marker can be placed at a location
+    # Moves were not being read in correctly as integers.
+    # Type casting fixed issue
+
+    def add_move(self, location, cur_player_marker):
+        self.board[int(location[0]), int(location[1])] = cur_player_marker
+
     def clear(self):
-        # for windows 
-        if name == 'nt': 
-            system('cls') 
-        # for mac and linux 
+        # for windows
+        if name == 'nt':
+            system('cls')
+        # for mac and linux
         else: 
             system('clear') 
-    
-class player:
+
+class Player:
     marker = ""
+
     def __init__(self,marker):
         self.marker = marker
     
@@ -97,7 +107,7 @@ class player:
         return self.marker
     
     def get_player_move(self):
-        move = np.empty(2) 
+        move = np.empty(2)
         print("Press enter once you finish choosing.")
         check_bool = 0
     
@@ -120,28 +130,28 @@ class player:
                 time.sleep(1)
                 G1.clear()
                 G1.print_board()
-            
+
         return move
 
-class computer:
+
+class Computer:
     marker = "O"
     
     # generates random move on board
     def get_player_move(self):
-        return [randint(0,2),randint(0,2)]
+        return [randint(0,2), randint(0,2)]
     
     def get_player_marker(self):
         return self.marker
 
-
-        
 # Main Game Loop
 
-G1 = game()
+
+G1 = Game()
 win_state = 0
 num_moves = 0
 
-#This checks command line argument for non integers
+# This checks command line argument for non integers
 try:
     arg1 = sys.argv[1]
     try:
@@ -151,13 +161,10 @@ try:
         G1.set_player_count(-1)
 except IndexError:
     G1.set_player_count(-1)
-    
 
-player1 = player("X")
-player2 = player("O")
-computer_player = computer()
-
-
+player1 = Player("X")
+player2 = Player("O")
+computer_player = Computer()
 
 G1.clear()
 print("Welcome to Tic Tac Toe!\n")
@@ -169,7 +176,7 @@ input("Press enter to start the game ... ")
 
 # Player vs Computer
 if G1.get_player_count() == 1:
-    players = [player1,computer_player]
+    players = [player1, computer_player]
     print("You are playing against the computer!")
     time.sleep(2)
     G1.clear()
@@ -178,16 +185,16 @@ if G1.get_player_count() == 1:
         print("The computer goes first!") 
         G1.add_move([randint(0,2),randint(0,2)],players[G1.get_player()].get_player_marker())
         G1.print_board()
-        num_moves+=1
+        num_moves += 1
         time.sleep(2)
         G1.clear()
     else:
-         print("You go first!")
-         players[G1.get_player()].get_player_move()
-         num_moves+=1
-         time.sleep(2)
-         G1.clear()
-    
+        print("You go first!")
+        players[G1.get_player()].get_player_move()
+        num_moves += 1
+        time.sleep(2)
+        G1.clear()
+
     G1.set_player(1) if G1.get_player() == 0 else G1.set_player(0)
     # Game Loop
     while(win_state == 0 and num_moves <= 9):
@@ -195,11 +202,11 @@ if G1.get_player_count() == 1:
         G1.print_board()
         G1.print_player_turn()
         location = players[G1.get_player()].get_player_move()
-    #This if statement checks to see a choosen location can be placed on and checks to see if the game is over.    
+    # This if statement checks to see a choosen location can be placed on and checks to see if the game is over.    
         if G1.check_location(location):
             G1.add_move(location,players[G1.get_player()].get_player_marker())
-            num_moves +=1
-            if num_moves > 9: 
+            num_moves += 1
+            if num_moves > 9:
                 G1.clear()
                 G1.print_board()
                 print("It's a tie. Nobody wins :(")
@@ -216,17 +223,17 @@ if G1.get_player_count() == 1:
                 time.sleep(2)
                 win_state == 1
                 break
-            #This statement changes which player's turn it is
+            # This statement changes which player's turn it is
             G1.set_player(1) if G1.get_player() == 0 else G1.set_player(0)
-        #This statement reminds the human player that you can not place a piece on an occupied position on the board.
+        # This statement reminds the human player that you can not place a piece on an occupied position on the board.
         elif G1.get_player() == 0:
             print("There is a piece in row",location[0],"column",location[1],"!\nPlease enter a position with no piece on it.")
             time.sleep(2)
-   
+
 
 # Player vs Player
 elif G1.get_player_count() == 2:
-    players = [player1,player2]
+    players = [player1, player2]
     print("Player",G1.get_player()+1,"goes first!")
     time.sleep(2)
     # Game loop
