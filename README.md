@@ -1,2 +1,2 @@
 # TicTacToe
-Tic Tac Toe implemented in python 
+Tic Tac Toe implemented in Python 
