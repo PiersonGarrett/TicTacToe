@@ -66,17 +66,17 @@ class TestCheckMethods(unittest.TestCase):
     # Testing if method returns True for 3 in a row diagonally and False for no 3 in a row diagonally
     def test_diag_check(self):
         case_empty = np.empty([3, 3], dtype=str)
-        case_diag1 = np.empty([3, 3], dtype=str)
+        case_diamatch = np.empty([3, 3], dtype=str)
         case_diag2 = np.empty([3, 3], dtype=str)
         for i in range(3):
-            case_diag1[i, i] = self.marker
+            case_diamatch[i, i] = self.marker
             case_diag2[i, 2-i] = self.marker
         
         self.game.set_board(case_empty)
         diag_bool_empty = self.game.check_diag(self.marker)
         self.assertFalse(diag_bool_empty)
         
-        self.game.set_board(case_diag1)
+        self.game.set_board(case_diamatch)
         diag_bool1 = self.game.check_diag(self.marker)
         self.assertTrue(diag_bool1)
 
@@ -100,5 +100,7 @@ class TestCheckMethods(unittest.TestCase):
         location_bool = self.game.check_location([row_test,col_test])
         self.assertFalse(location_bool)
 
+   
+        
 if __name__ == '__main__':
     unittest.main()

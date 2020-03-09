@@ -25,6 +25,7 @@ class Game:
     
     def set_game_mode(self,game_mode):
         self.game_mode = game_mode
+    
     # This method is to help with unit testing
     def set_board(self,board):
         self.board = board
@@ -54,7 +55,8 @@ class Game:
             print("It's Player",self.cur_player+1,"'s turn!")
         else:
            print("It's Your Turn!") if self.get_cur_player() == 0 else print("It's the Computer's Turn!")
-
+    
+    # Checks all rows for 3 in a row.
     def check_row(self, marker):
         for row, i in enumerate(self.board):
             count = 0
@@ -64,7 +66,8 @@ class Game:
             if count == 3:
                 return True
         return False
-
+    
+    # Checks all columns for 3 in a row.
     def check_col(self, marker):
         for col,  i in enumerate(self.board):
             count = 0
@@ -75,7 +78,8 @@ class Game:
             if count == 3:
                 return True
         return False
-
+    
+    # Checks both diagonals for 3 in a row.
     def check_diag(self, marker):
         diag = np.empty([2, 3], dtype=str)
         for i in range(3):
@@ -91,19 +95,21 @@ class Game:
             if count1 == 3 or count2 == 3:
                 return True
         return False
-
+    
+    # This function uses previous checks to see if the current player has won.
     def check_win(self, marker):
         is_win = self.check_row(marker) or \
             self.check_col(marker) or self.check_diag(marker)
         return is_win
 
-
-    def check_location(self, location):
-        return self.board[int(location[0]), int(location[1])] == ""
     # This function checks to see if a marker can be placed at a location
     # Moves were not being read in correctly as integers.
     # Type casting fixed issue
-
+    def check_location(self, location):
+        return self.board[int(location[0]), int(location[1])] == ""
+    # This function adds a move to the board.
+    # Locations were not being read correctly as integers.
+    # Type casting fixed issues.
     def add_move(self, location, cur_player_marker):
         self.board[int(location[0]), int(location[1])] = cur_player_marker
 

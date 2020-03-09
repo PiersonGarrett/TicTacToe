@@ -14,7 +14,7 @@ class Player:
         move = np.empty(2)
         print("Press enter once you finish choosing.")
         check_bool = 0
-    
+        # checks the input to make sure it is a positive integer from 1 to 3
         while(check_bool == 0):
             try:
                 move[0] = int(input("Enter the row: "))-1
