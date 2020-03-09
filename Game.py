@@ -25,6 +25,9 @@ class Game:
     
     def set_game_mode(self,game_mode):
         self.game_mode = game_mode
+    # This method is to help with unit testing
+    def set_board(self,board):
+        self.board = board
     
     def get_player_count(self):
         return self.num_player
@@ -91,7 +94,7 @@ class Game:
 
     def check_win(self, marker):
         is_win = self.check_row(marker) or \
-                 self.check_col(marker) or self.check_diag(marker)
+            self.check_col(marker) or self.check_diag(marker)
         return is_win
 
 
